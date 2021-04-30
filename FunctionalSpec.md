@@ -14,7 +14,7 @@ At the end of this exercise, you should have a test suite that you feel confiden
 ## Where To Start
 
 1. Read this document.
-2. Look at the [existing tests (Line 209 and below)](test.ts).
+2. Look at the [existing tests (Line 211 and below)](test.ts).
 3. Verify the tests run by running `npm test`.
 4. Two of the tests will fail. Start by making them pass.
    > Finish `createSerialInParser()` beginning on [test.ts Line 175](test.ts). This method provides an eventEmitter (`ee`) and a message queue (`messageQueue`) that should contain parsed messages.
