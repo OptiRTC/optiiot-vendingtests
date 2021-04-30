@@ -187,6 +187,12 @@ const createSerialInParser = (serialIn: AsyncIterableIterator<Buffer>) => {
         //To implement: handling the parsing of serialIn so that tests can make
         //assertions about the vending machine's response to user's input
 
+        //Notes:
+        //* See src/mockedDevices/mockedVendingMachine1.ts for example of how
+        //  a mocked vending machine parses messages from it's serialIn.
+        //* The serialIn returns an AsyncIterator; just like a readable stream in nodejs
+        //  https://nodejs.org/api/stream.html#stream_readable_symbol_asynciterator
+
         //emitting chunk may be of interest during development (and should be removed)
         console.log('user serialIn:', chunk);
         ee.emit('receivedChunk', chunk);
