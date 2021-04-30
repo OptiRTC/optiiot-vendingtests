@@ -206,6 +206,24 @@ const createSerialInParser = (serialIn: AsyncIterableIterator<Buffer>) => {
   return {ee, messageQueue};
 };
 
+test('Received data over serial in from vending machine after ordering coffee', async t => {
+  const fixtures = fixturesFactory();
+  const {userButtons, abortSignal, ee} = fixtures; //extract mocks/fixtures needed
+  try {
+    //Setup listener to accumulate chunks of data arrived over serial
+    let chunkCount = 0;
+    ee.addListener('receivedChunk', () => chunkCount++);
+    //Press smallButton to order coffee
+    await userButtons.smallButton.pressAndReleaseButton(abortSignal);
+    //Naive approach to give time for vending machine to react and serialIn parser to process message(s)
+    await waitFor(1000, abortSignal);
+    //Expect the vending machine to send data over serial in response to ordering small coffee
+    t.is(chunkCount > 0, true);
+  } finally {
+    cleanupFixtures(fixtures);
+  }
+});
+
 test('Vending Machine handles small coffee button press', async t => {
   const fixtures = fixturesFactory();
   const {userButtons, abortSignal, /*ee, messageQueue*/} = fixtures; //extract mocks/fixtures needed
