@@ -63,12 +63,9 @@ As mentioned in [Assumptions and Constraints](#assumptions-and-constraints), you
   - A user button can be pressed, held for `ms` milliseconds and then released using
     `button.pressHoldAndReleaseButton(ms)`.
 
-  > See [BaseMockedVendingMachine](src/mockedDevices/mockedVendingMachine.ts) for example
-  > of how the buttons are provided to its constructor.
-
 - Serial communications will be mocked using [`createMockedSerialOutput()`](src/models/createMockedSerialOutput.ts)
 
-  - See [fixturesFactory in `test.ts`](test.ts)
+  - See [`fixturesFactory()` in `test.ts`](test.ts)
 
 - Examples of reading serial input:
 
