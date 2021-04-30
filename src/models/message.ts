@@ -120,24 +120,3 @@ export const getMessageKeyStringFromMessageKey = (
   const data = messageLookupByMessageKey.get(messageKey);
   return data ? data[0] : undefined;
 };
-
-//Test if a buffer matches
-//* Also see getMessageKeyFromBuf()
-export const isKnownBufferMessage = (buf: Buffer): boolean => {
-  if (Buffer.isBuffer(buf)) {
-    const byteSize = buf.byteLength;
-    if (byteSize >= 10) {
-      //All messages >= 10 bytes
-      const keyAsString = buf.toString('ascii', 0, 8);
-      if (messageLookupByKeyAsString.has(keyAsString)) {
-        //message
-        const valueSize = buf.readUInt16LE(8); //little-endian unsigned 16 bit int
-        if (10 + valueSize === byteSize) {
-          return true;
-        }
-      }
-    }
-  }
-
-  return false;
-};
