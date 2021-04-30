@@ -1,4 +1,4 @@
-# optiiot-vendingmachine
+# Opti IoT Vending Machine Tests
 
 First-round test for prospective IoT Site Reliability Engineers at OptiRTC
 
