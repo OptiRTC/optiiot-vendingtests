@@ -79,7 +79,7 @@ As mentioned in [Assumptions and Constraints](#assumptions-and-constraints), you
 ### Specific behaviors of the Mocked Vending Machine (to fulfill [functional requirements](#functional-requirements-for-coffee-vending-machine-to-verify-with-tests)):
 
 - A mocked vending machine that the unit tests runs against will
-  implement [`IMockedVendingMachine`](src/mockedDevices/IMockedVendingMachine)
+  implement [`IMockedVendingMachine`](src/mockedDevices/mockedVendingMachine.ts)
 - When the machine is initialized, assume the following state values:
   - `order = {0, 0, 0} // zero small, zero medium, zero large coffees`
   - `curFunds = 0 //zero cents`
