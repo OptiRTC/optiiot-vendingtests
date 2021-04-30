@@ -193,7 +193,9 @@ const createSerialInParser = (serialIn: AsyncIterableIterator<Buffer>) => {
         //* The serialIn returns an AsyncIterator; just like a readable stream in nodejs
         //  https://nodejs.org/api/stream.html#stream_readable_symbol_asynciterator
 
-        //emitting chunk may be of interest during development (and should be removed)
+        //these events are in place to show that data is arriving by serial,
+        //and are *NOT* part of the spec you need to verify. You do not have
+        //to remove them.
         console.log('user serialIn:', chunk);
         ee.emit('receivedChunk', chunk);
       }
@@ -207,10 +209,12 @@ const createSerialInParser = (serialIn: AsyncIterableIterator<Buffer>) => {
 };
 
 test('Received data over serial in from vending machine after ordering coffee', async t => {
+  //create new fixtures for test
   const fixtures = fixturesFactory();
-  const {userButtons, abortSignal, ee} = fixtures; //extract mocks/fixtures needed
+  //extract mocks/fixtures needed
+  const {userButtons, abortSignal, ee} = fixtures;
   try {
-    //Setup listener to accumulate chunks of data arrived over serial
+    //Setup event emitter listener to accumulate chunks of data arrived over serial
     let chunkCount = 0;
     ee.addListener('receivedChunk', () => chunkCount++);
     //Press smallButton to order coffee
@@ -220,13 +224,15 @@ test('Received data over serial in from vending machine after ordering coffee', 
     //Expect the vending machine to send data over serial in response to ordering small coffee
     t.is(chunkCount > 0, true);
   } finally {
+    //always cleanup fixtures regardless
+    //of success or fail
     cleanupFixtures(fixtures);
   }
 });
 
 test('Vending Machine handles small coffee button press', async t => {
   const fixtures = fixturesFactory();
-  const {userButtons, abortSignal, /*ee, messageQueue*/} = fixtures; //extract mocks/fixtures needed
+  const {userButtons, abortSignal /*ee, messageQueue*/} = fixtures; //extract mocks/fixtures needed
   try {
     await userButtons.smallButton.pressAndReleaseButton(abortSignal);
     //Naive approach to give time for vending machine to react and serialIn parser to process message(s)
@@ -244,7 +250,7 @@ test('Vending Machine handles small coffee button press', async t => {
 
 test('Vending Machine handles adding $1', async t => {
   const fixtures = fixturesFactory();
-  const {userSerialOut, abortSignal, /*ee, messageQueue*/} = fixtures;
+  const {userSerialOut, abortSignal /*ee, messageQueue*/} = fixtures;
   try {
     const buf = createMessageBuffer(MessageKey.addValue);
     buf.writeUInt32LE(100, 10); //100 cents written at offset 10

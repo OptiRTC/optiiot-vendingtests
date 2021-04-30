@@ -1,27 +1,35 @@
-# Opti Embedded Vending Machine Functional Specification
+# Opti IoT SRE Test
 
 ## Purpose/Responsibilities
 
-Create a set of unit tests to verify correct functionality of a coffee vending machine.
+Create a set of unit tests to verify [correct functionality of a coffee vending machine](#functional-requirements-for-coffee-vending-machine-to-verify-with-tests).
 
 The coffee vending machine provides the means of ordering one or more customizable cups of
 coffee, providing payment, receiving change, and dispensing the correct product.
 
 > [test.ts](test.ts) is provided as a starting point for this task. You can execute tests with `npm test`.
 
+At the end of this exercise, you should have a test suite that you feel confident can determine if a given mocked vending machine meets the [Functional Requirements for Coffee Vending Machines](#functional-requirements-for-coffee-vending-machine-to-verify-with-tests).
+
+## Where To Start
+
+1. Read this document.
+2. Look at the [existing tests (Line 209 and below)](test.ts).
+3. Verify the tests run by running `npm test`.
+4. Two of the tests will fail. Start by making them pass.
+   > Finish `createSerialInParser()` beginning on [test.ts Line 175](test.ts). This method provides an eventEmitter (`ee`) and a message queue (`messageQueue`) that should contain parsed messages.
+   > Hint: the Event Emitter ("ee") and message queue from `createSerialInParser()` are provided by the `fixturesFactory()` and can be used to write your assertions about the logic of the vending machine.
+5. Add more tests to [test.ts](test.ts) to verify the [vending machine functional requirements](#functional-requirements-for-coffee-vending-machine-to-verify-with-tests).
+6. When you are comfortable, hand it in (see [README](README.md))!
+
 ## Assumptions and Constraints
 
-- The tests will be written from the perspective of the user of the vending machine.
-- To develop and test your unit tests, use a mocked coffee vending machine.
-  - Some example mocked coffee vending machines are provided.
-  - You should create some mocks of incorrectly implemented coffee vending machines to demonstrate
-    your unit tests correctly identifies problems with the incorrect implementation. (test your tests)
-- GPIO and Serial communications between the user and vending machine will be mocked.
-- Does not depend on any external web services.
-- Does not require any persistent data storage.
-- Only manages 1 coffee order at once. One order may consist of multiple coffees of different sizes. You can assume whatever physical apparatus is connected to the other end of this service prevents more than 1 user from using it at once.
+- Write tests from the perspective of the user of the vending machine.
+- To develop and test your unit tests, use a mocked coffee vending machine. Mocked coffee vending machines are software implementations of the [Opti Vending Machine Hardware](#vending-machine-hardware)
+  - [Some](src/mockedDevices/mockedVendingMachine.ts) [example](src/mockedDevices/mockedVendingMachine1.ts) [mocked coffee vending machines](src/mockedDevices/mockedVendingMachine2.ts) are provided.
+  - [GPIO](src/models/mockedGpioPin.ts) and [Serial communications](src/models/createMockedSerialOutput.ts) are the only interfaces between user and the vending machine.
 
-## Functional Requirements For Vending Machine
+## Functional Requirements For Coffee Vending Machine To Verify With Tests
 
 - Order coffee in 3 sizes (small for $1.75, medium for $2.00, large for $2.25).
 - Allow multiple coffee orders per payment transaction, up to 5 coffees.
@@ -30,90 +38,74 @@ coffee, providing payment, receiving change, and dispensing the correct product.
 - “Dispense” coffee when an order is completed if adequate payment has been provided and display money remaining in payment transaction. The developer can assume that the physical implications of this dispense operation always succeed and do not need to be verified - in this context, "dispense" means complete the order.
 - Insertion of money is communicated to device by serial message
 - Device sends updates to user via events sent via Serial communications
+- Does not depend on any external web services.
+- Does not require any persistent data storage.
+- Only manages 1 coffee order at once. One order may consist of multiple coffees of different sizes. You can assume whatever physical apparatus is connected to the other end of this service prevents more than 1 user from using it at once.
 
-## Implementation Requirements
+## Vending Machine Hardware
 
 - There are 4 user buttons
-
-  - Small Button
-  - Medium Button
-  - Large Button
+  - Add One Small Button
+  - Add One Medium Button
+  - Add One Large Button
   - Dispense/Cancel Button
-    - Dispense will be triggered by press & release
-    - Cancel will be triggered by press & hold > 2 seconds
+    - Dispense is triggered by press & release
+    - Cancel is triggered by press & hold > 2 seconds
+- There is a serial connection between the user and the vending machine.
 
-- The user buttons will be mocked using the [`MockedGpioPin`](src/models/mockedGpioPin.ts) class
+## Mocked Vending Machine Implementation Requirements
+
+As mentioned in [Assumptions and Constraints](#assumptions-and-constraints), you are encouraged to use software mocks of the [Vending Machine Hardware](#vending-machine-hardware) to show that your tests work as expected. We have already provided mocked vending machines (see /src/mockedDevices) for examples using the following components:
+
+- The [`MockedGpioPin`](src/models/mockedGpioPin.ts) class for user buttons.
 
   - A user button can be pressed and released quickly using `button.pressAndReleaseButton()`
   - A user button can be pressed, held for `ms` milliseconds and then released using
-    `button.pressHoldAndReleaseButton(ms)`
-
-- To mock wiring the user buttons to the mocked vending machine, output views of
-  each button are provided to the mocked vending machine's constructor
+    `button.pressHoldAndReleaseButton(ms)`.
 
   > See [BaseMockedVendingMachine](src/mockedDevices/mockedVendingMachine.ts) for example
   > of how the buttons are provided to its constructor.
 
-- Serial communications are used to:
-
-  - Signal to the vending machine that money was added by the user
-  - To communicate actions back to the user from the vending machine
-
 - Serial communications will be mocked using [`createMockedSerialOutput()`](src/models/createMockedSerialOutput.ts)
 
-  > `createMockedSerialOutput()` is a factory that provides an `AsyncIterator` of the serial's
-  > output stream and a `push()` method to write data to the serial output.
+  - See [fixturesFactory in `test.ts`](test.ts)
 
-  - Examples:
+- Examples of reading serial input:
 
-    - Create serial output from the user to the vending machine.
+  - See partially implemented `createSerialInParser()` in [test.ts](test.ts) for an example of how a test fixture reads the vending machine's serial output as input.
 
-      > See [test.ts](test.ts) for an example.
-      >
-      > - In `fixturesFactory()`, `userSerialOut` is created with `createMockedSerialOutput()`
-      > - `userSerialOut.output` is provided as serial input to the mocked mocked vending
-      >   machine's constructor.
-      > - To write to `userSerialOut`, use `userSerialOut.push(data)`
+  - See [mockedVendingMachine.parseAndHandleSerialInMessages()](src/mockedDevices/mockedVendingMachine1.ts) for an example how a mocked vending machine reads `serialIn` from the user, i.e. the test fixture.
 
-    - Create serial output from the vending machine to the user
+- Examples of writing serial output:
+  - See [`addOneToOrder()`](src/mockedDevices/mockedVendingMachine1.ts) for an example of writing a message to serial from a mocked vending machine.
 
-      > See [class `BaseMockedVendingMachine`](src/mockedDevices/mockedVendingMachine.ts) for example
-      > of how to create serial output for the vending machine. This base class can be used to
-      > extend your `MockedVendingMachine`
+### Specific behaviors of the Mocked Vending Machine (to fulfill [functional requirements](#functional-requirements-for-coffee-vending-machine-to-verify-with-tests)):
 
-      > Then see [test.ts](test.ts), where the vending machine's serialOut is
-      > provided as the `serialIn` for the user tests.
-
-- Example of reading vending machine's serial output:
-
-  > See partially implemented `createSerialInParser()` in [test.ts](test.ts)
-
-  > As well, see [mockedVendingMachine.parseAndHandleSerialInMessages()](src/mockedDevices/mockedVendingMachine1.ts)
-  > from the perspective of parsing `serialIn` to the mocked vending machine.
-
-- Vending Machine expectations from perspective of user:
-  - A mocked vending machine that the unit tests runs against will
-    implement [`IMockedVendingMachine`](src/mockedDevices/IMockedVendingMachine)
-  - When the machine is initialized, assume the following state values:
-    - `order = {0, 0, 0} // zero small, zero medium, zero large coffees`
-    - `curFunds = 0 //zero cents`
-  - When money is added:
-    - vending machine sends message for `curFunds`
-  - When coffee is added (user presses small, medium and/or large buttons):
-    - vending machine sends message for `order`
-  - When dispense is triggered by user and there are insufficient funds:
-    - vending machine sends message for `insFunds`
-  - When dispense is triggered and there are sufficient funds:
-    - first vending machine sends messages for `receipt` and `refund` (in this order)
-    - then vending machine resets its internal state for `curFunds` and `order`
-    - then vending machine sends messages for `curFunds` and `order` (in this order)
-  - When cancel is triggered:
-    - first vending machine sends message for `cancel` and `refund` (in this order)
-    - then vending machine resets its internal state for `curFunds` and `order`
-    - then vending machine sends messages for `curFunds` and `order` (in this order)
-  - Numbers are encoded as little-endian unsigned integers of applicable size
+- A mocked vending machine that the unit tests runs against will
+  implement [`IMockedVendingMachine`](src/mockedDevices/IMockedVendingMachine)
+- When the machine is initialized, assume the following state values:
+  - `order = {0, 0, 0} // zero small, zero medium, zero large coffees`
+  - `curFunds = 0 //zero cents`
+- When money is added:
+  - vending machine sends message for `curFunds`
+- When coffee is added (user presses small, medium and/or large buttons):
+  - vending machine sends message for `order`
+- When dispense is triggered by user and there are insufficient funds:
+  - vending machine sends message for `insFunds`
+- When dispense is triggered and there are sufficient funds:
+  - first vending machine sends messages for `receipt` and `refund` (in this order)
+  - then vending machine resets its internal state for `curFunds` and `order`
+  - then vending machine sends messages for `curFunds` and `order` (in this order)
+- When cancel is triggered:
+  - first vending machine sends message for `cancel` and `refund` (in this order)
+  - then vending machine resets its internal state for `curFunds` and `order`
+  - then vending machine sends messages for `curFunds` and `order` (in this order)
+- Numbers are encoded as little-endian unsigned integers of applicable size
+- All messages comply with with [Opti Vending Machine Message Protocol](#opti-vending-machine-message-protocol), although they may not perfectly align with the start and end of message chunks.
 
 ## Opti Vending Machine Message Protocol
+
+This describes the format of the messages sent over Serial to and from the Opti Vending Machine.
 
 - Each serial message is 3 fields:
   - A `KEY` field of 8 bytes
