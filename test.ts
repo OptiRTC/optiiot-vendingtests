@@ -208,11 +208,14 @@ const createSerialInParser = (serialIn: AsyncIterableIterator<Buffer>) => {
 
 test('Vending Machine handles small coffee button press', async t => {
   const fixtures = fixturesFactory();
-  const {userButtons, abortSignal} = fixtures; //extract mocks/fixtures needed
+  const {userButtons, abortSignal, /*ee, messageQueue*/} = fixtures; //extract mocks/fixtures needed
   try {
     await userButtons.smallButton.pressAndReleaseButton(abortSignal);
     //Naive approach to give time for vending machine to react and serialIn parser to process message(s)
     await waitFor(1000, abortSignal);
+    //Ideas for getting data to write assertions against:
+    //* You may look in messageQueue for parsed messages
+    //* or you may setup listeners using ee
     t.fail(
       `Not implemented: Expect 'order' message with correct sizes from serialIn`
     );
@@ -223,7 +226,7 @@ test('Vending Machine handles small coffee button press', async t => {
 
 test('Vending Machine handles adding $1', async t => {
   const fixtures = fixturesFactory();
-  const {userSerialOut, abortSignal} = fixtures;
+  const {userSerialOut, abortSignal, /*ee, messageQueue*/} = fixtures;
   try {
     const buf = createMessageBuffer(MessageKey.addValue);
     buf.writeUInt32LE(100, 10); //100 cents written at offset 10
