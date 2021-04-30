@@ -99,9 +99,6 @@ export const isKnownMessageKey = (
   //eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   messageLookupByMessageKey.has(messageKey as any);
 
-export const isKnownMessageKeyString = (messageKey: string): boolean =>
-  messageLookupByKeyAsString.has(messageKey);
-
 export const getMessageKeyFromMessageKeyString = (
   messageKeyString: string
 ): MessageKey | undefined => {
@@ -113,6 +110,9 @@ export const getMessageKeyFromMessageKeyString = (
   const data = messageLookupByKeyAsString.get(messageKeyString);
   return data ? data[0] : undefined;
 };
+
+export const isKnownMessageKeyString = (messageKeyString: string): boolean =>
+  getMessageKeyFromMessageKeyString(messageKeyString) !== undefined;
 
 export const getMessageKeyStringFromMessageKey = (
   messageKey: MessageKey
