@@ -9,9 +9,9 @@ This repository is the starting point for the new OptiRTC IoT Site Reliability E
 ## Getting Started
 
 1. Clone this repository to your local system.
-2. Create your tests in accordance with the [Functional Specification](FunctionalSpec.md)
-3. Attach a zip file of your complete repository along with your job application
-   - Exclude items from zip that are in `.gitignore` such as `node_modules` which we can install with `npm install`
+2. Create your tests in accordance with the [Functional Specification](FunctionalSpec.md).
+3. Attach a zip file of your complete repository along with your job application.
+   - Exclude items from zip that are in `.gitignore` such as `node_modules` which we can install with `npm install`.
 
 ## How you will be evaluated
 
