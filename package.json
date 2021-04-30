@@ -18,6 +18,7 @@
     "prettier:all": "prettier --write .",
     "test": "xo && ava",
     "test:ava": "ava",
+    "test:debug": "npx ndb ava --serial",
     "test:xo": "xo",
     "test:prettier": "prettier --check ."
   },
