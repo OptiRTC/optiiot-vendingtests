@@ -15,4 +15,10 @@ This repository is the starting point for the new OptiRTC IoT Site Reliability E
 
 ## How you will be evaluated
 
-We are looking for concise and readable code that meets the component specifications. Where the component specifications are ambiguous or lacking, we are looking to see you make a decision that allows you to move forward without compromising the basic functionality of the application. We are expecting this task to take you 1-3 hours; please do not spend more than 5 hours on this task.
+We are looking to see that you: 
+- Make good decisions about separating concerns in your implementation.
+- Understand how to unpack messages from a serial input.
+- Can reason about signals on GPIO pins.
+- Can test expected asynchronous interactions.
+
+We are expecting this task to take you 1-3 hours; please do not spend more than 5 hours on this task.
