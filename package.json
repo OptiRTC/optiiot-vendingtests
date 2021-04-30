@@ -1,0 +1,37 @@
+{
+  "name": "Opti-IOT-SRE-Vending-Machine",
+  "version": "0.0.1",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:OptiRTC/IoTSRE-vendingMachine.git"
+  },
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=15.5.1",
+    "npm": ">=7.11.1"
+  },
+  "scripts": {
+    "lint": "xo",
+    "prettier": "prettier",
+    "prettier:all": "prettier --write .",
+    "test": "xo && ava",
+    "test:ava": "ava",
+    "test:xo": "xo",
+    "test:prettier": "prettier --check ."
+  },
+  "devDependencies": {
+    "@ava/typescript": "^1.1.1",
+    "@types/node": "^15.0.1",
+    "ava": "^3.15.0",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.2.4",
+    "xo": "^0.39.1"
+  },
+  "dependencies": {
+    "eventemitter3": "^4.0.7"
+  }
+}
