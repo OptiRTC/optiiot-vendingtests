@@ -22,9 +22,10 @@ At the end of this exercise, you should have a test suite that you feel confiden
 5. Add more tests to [test.ts](test.ts) to verify the [vending machine functional requirements](#functional-requirements-for-coffee-vending-machine-to-verify-with-tests).
 6. When you are comfortable, hand it in (see [README](README.md))!
 
-> Debugging: The npm script `npm run test:debug` is provided as one means to debug. This script runs the tests inside
-> [ndb](https://github.com/GoogleChromeLabs/ndb#ndb). If you add a `debugger;`
-> statement in the desired location of the code, it will break at this point.
+> Debugging: [ndb](https://github.com/GoogleChromeLabs/ndb#ndb) is useful for debugging.
+> If you add a `debugger;` statement in the desired location of the code, it will break at this point.
+> Once `ndb` is installed, you can run `ndb npx ava --serial` to run the tests serially (i.e. sequentially rather
+> than in parallel), using this repo's locally installed `ava`.
 
 ## Assumptions and Constraints
 
