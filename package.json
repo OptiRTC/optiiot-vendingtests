@@ -18,9 +18,9 @@
     "prettier:all": "prettier --write .",
     "test": "xo && ava",
     "test:ava": "ava",
-    "test:debug": "npx ndb ava --serial",
-    "test:xo": "xo",
-    "test:prettier": "prettier --check ."
+    "test:ava:serial": "ava --serial",
+    "test:prettier": "prettier --check .",
+    "test:xo": "xo"
   },
   "devDependencies": {
     "@ava/typescript": "^1.1.1",
