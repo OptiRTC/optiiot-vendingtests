@@ -27,7 +27,7 @@ const messageDataLookupEntries: [MessageKey, MessageDataWithString][] = [
   [MessageKey.curFunds, ['curFunds', 4]], //uInt32
   [MessageKey.order, ['order', 12]], //3 * uInt32 = 12
   [MessageKey.insFunds, ['insFunds', 0]],
-  [MessageKey.receipt, ['receipt', 32]], //8 * uInt32 = 32
+  [MessageKey.receipt, ['receipt', 32]], //8 * uInt32 = 32 (3 counts, 3 subtotals, total, refund)
   [MessageKey.cancel, ['cancel', 0]],
   [MessageKey.refund, ['refund', 4]] //uInt32
 ];

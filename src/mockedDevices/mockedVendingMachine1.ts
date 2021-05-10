@@ -205,6 +205,13 @@ export class MockedVendingMachine extends BaseMockedVendingMachine {
   private get receiptMessage(): Buffer {
     const buf = createMessageBuffer(MessageKey.receipt);
     let offset = 10;
+
+    //Write order's counts for small, medium and large to receipt
+    for (const n of this.order) {
+      buf.writeUInt32LE(n, offset);
+      offset += 4;
+    }
+
     //Write subtotals for small, medium and large to receipt
     for (const n of this.orderSubTotalsInCents) {
       buf.writeUInt32LE(n, offset);
